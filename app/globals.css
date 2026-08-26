@@ -1,0 +1,23 @@
+:root {
+  --bg: #0a0a0a;
+  --panel-bg: #111214;
+  --border: #262a2e;
+  --text: #d8dee3;
+  --accent: #e0a835; /* command bar accent - nod to Bloomberg's yellow */
+  --bid: #3ecf6e;
+  --ask: #e25555;
+  --muted: #6b7280;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+}

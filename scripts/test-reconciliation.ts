@@ -67,7 +67,9 @@ async function main() {
   ws.onerror = (e) => console.error("WS error:", e);
 
   function handleEvent(event: DepthEvent) {
-    if (event.U !== book.lastUpdateId + 1) {          // contiguity check, 1.1.5
+    const nextUpdateId = book.lastUpdateId + 1;
+    if (event.u < nextUpdateId) return; // stale or duplicate event
+    if (event.U > nextUpdateId) {                    // contiguity check, 1.1.5
       console.warn(`Gap! expected U=${book.lastUpdateId + 1}, got ${event.U}`);
       return triggerResync();
     }

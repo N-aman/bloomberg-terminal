@@ -1,4 +1,7 @@
-// lib/orderbook-worker-client.ts
+/**
+ * Order Book Worker Client
+ * Maintains shared main-thread order book mirrors populated from the background Worker.
+ */
 type BookLevel = Map<number, number>;
 type SymbolBook = { bids: BookLevel; asks: BookLevel; stale: boolean };
 
@@ -24,6 +27,10 @@ export function getWorker(): Worker {
           const book = ensureBook(d.symbol);
           const map = d.side === "bid" ? book.bids : book.asks;
           d.quantity === 0 ? map.delete(d.price) : map.set(d.price, d.quantity);
+        }
+        if (typeof window !== "undefined") {
+          (window as any).__terminal_ws_ticks = ((window as any).__terminal_ws_ticks || 0) + (msg.updates?.length || 1);
+          (window as any).__terminal_book_deltas = ((window as any).__terminal_book_deltas || 0) + (msg.updates?.length || 1);
         }
       }
       if (msg.type === "resync") ensureBook(msg.symbol).stale = true;
